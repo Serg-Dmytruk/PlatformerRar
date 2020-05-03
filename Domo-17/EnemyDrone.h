@@ -1,74 +1,136 @@
 #pragma once
 #include "GameSprite.h"
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include "Level.h"
+
+Texture DroneText;
 
 class EnemyDrone : public GameSprite
 {
 protected:
 	Vector2f WhereIam;
 	Sprite ObjSprite;
-	IntRect BoxColider;
-	enum {left, right} State;
-	bool Life;
-	int Direction;
-	float Speed;
+	float MyWingth;
+	float MyHeigth;
+	std::vector<Object> ObjectsInMap;
+	enum { left, right } State;
 	float Dx;
-	float Dy;
+	float Speed;
+	bool Life;
 	float CurrentFrame;
+	bool IamDaying;
 public:
-	EnemyDrone()
+	EnemyDrone(Level& lvl, float X, float Y)
 	{
-		WhereIam.x = 355;
-		WhereIam.y = 320;
-		Life = true;
-		Speed = 0.15;
-		Dx = 0;
-		Dy = 0;
+		DroneText.loadFromFile("SPRITES\\misc\\drone\\drone-1.png");
+		ObjSprite.setTexture(DroneText);
+		ObjSprite.setTextureRect(IntRect(0, 0, 55, 52));
+		ObjectsInMap = lvl.GetAllObjects();
+		MyWingth = 40;
+		MyHeigth = 48;
+		WhereIam.x = X;
+		WhereIam.y = Y;
+		ObjSprite.setPosition(WhereIam);
+		State = left;
 		CurrentFrame = 0;
-		BoxColider = { };
+		Life = true;
+		IamDaying = false;
 	}
-	
-	void DrawObj(RenderWindow& Show) override
+	void Movment(float& time)override
 	{
-		Show.draw(ObjSprite);
-	}
-	void Movment(float& time) override
-	{
-		
-		CurrentFrame += 0.01 * time;
-
-		if (CurrentFrame > 50)
-			CurrentFrame = 0;
-
-		if (CurrentFrame <= 25)
+		if (State == left)
 		{
-			Speed = -0.11 * time;
-			State = left;
+			ObjSprite.move(-0.15 * time, 0);
 			ObjSprite.setTextureRect(IntRect(0, 0, 55, 52));
-	
 		}
-		if (CurrentFrame > 25 && CurrentFrame <= 50)
+		if (State == right)
 		{
-			Speed = 0.11 * time;
-			State = right;
+			ObjSprite.move(0.15 * time, 0);
 			ObjSprite.setTextureRect(IntRect(55, 0, -55, 52));
-		}		
+		}
 	}
-	void Update(float& time) override
+	void Update(float& time)override
 	{
 		if (Life)
 		{
 			Movment(time);
-			switch (State)
-			{
-			case right: Dx = Speed; break;
-			case left: Dx = Speed; break;
-			}
-			WhereIam.x += Dx;
-			ObjSprite.setPosition(WhereIam.x, WhereIam.y);
+			WhereIam = ObjSprite.getPosition();
+			Colision(WhereIam.x);
 		}
+		else
+			DethAnimation(time );
+	}
+	void Colision(float Dx)
+	{
+		for (int i = 0; i < ObjectsInMap.size(); i++)
+		{
+			if (GetRect().intersects(ObjectsInMap[i].rect))
+			{
+				bool MoveSwapSide = true;
+
+				if (ObjectsInMap[i].name == "Solid")
+				{
+					if (State == left && MoveSwapSide) { WhereIam.x = ObjectsInMap[i].rect.left + ObjectsInMap[i].rect.width;  State = right; MoveSwapSide = false; }
+					if (State == right && MoveSwapSide) { WhereIam.x = ObjectsInMap[i].rect.left - MyWingth; State = left; MoveSwapSide = false; }
+				}
+			}
+		}
+	}
+	FloatRect GetRect() override
+	{
+		return FloatRect(WhereIam.x, WhereIam.y, MyWingth, MyHeigth);
+	}
+	void DrawObj(RenderWindow& Show) override
+	{
+		Show.draw(ObjSprite);
+	}
+	void DethAnimation(float & time)
+	{
+		CurrentFrame += 0.001 * time;
+		if(CurrentFrame >= 6)
+			CurrentFrame = 0; IamDaying = true;
+
+			if (CurrentFrame <= 1)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-1.png");
+				ObjSprite.setTexture(DroneText);
+			}
+			else if (CurrentFrame > 1 && CurrentFrame <= 2)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-2.png");
+				ObjSprite.setTexture(DroneText);
+			}
+			else if (CurrentFrame > 2 && CurrentFrame <= 3)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-3.png");
+				ObjSprite.setTexture(DroneText);
+			}
+			else if (CurrentFrame > 3 && CurrentFrame <= 4)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-4.png");
+				ObjSprite.setTexture(DroneText);
+			}
+			else if (CurrentFrame > 4 && CurrentFrame <= 5)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-5.png");
+				ObjSprite.setTexture(DroneText);
+			}
+			else if (CurrentFrame > 5 && CurrentFrame <= 6)
+			{
+				DroneText.loadFromFile("SPRITES\\misc\\enemy-explosion\\enemy-explosion-6.png");
+				ObjSprite.setTexture(DroneText);
+				IamDaying = true;
+			}
+		
+	}
+	bool GetLife()
+	{
+		return Life;
+	}
+	void SetLife(bool NewValue)
+	{
+		Life = NewValue;
+	}
+	bool GetIamDying()
+	{
+		return IamDaying;
 	}
 };

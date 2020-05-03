@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="32" tileheight="32" nextobjectid="82">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="32" tileheight="32" nextobjectid="94">
  <tileset firstgid="1" name="tileset1" tilewidth="32" tileheight="32">
   <image source="ENVIRONMENT/tileset1.png" width="1024" height="1024"/>
  </tileset>
@@ -846,83 +846,23 @@
    <tile gid="0"/>
    <tile gid="186"/>
    <tile gid="186"/>
-   <tile gid="186"/>
-   <tile gid="186"/>
-   <tile gid="186"/>
-   <tile gid="186"/>
-   <tile gid="186"/>
-   <tile gid="186"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
+   <tile gid="366"/>
+   <tile gid="366"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="186"/>
    <tile gid="186"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="186"/>
    <tile gid="186"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1070,6 +1010,66 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="186"/>
+   <tile gid="186"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="186"/>
+   <tile gid="186"/>
+   <tile gid="640"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
@@ -1086,7 +1086,7 @@
    <tile gid="186"/>
    <tile gid="186"/>
    <tile gid="186"/>
-   <tile gid="0"/>
+   <tile gid="672"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1215,7 +1215,7 @@
   <object id="22" name="Solid" type="Ground" x="510" y="386" width="66" height="92"/>
   <object id="23" name="Solid" type="Ground" x="350" y="414" width="158" height="64"/>
   <object id="24" name="Solid" type="Ground" x="286" y="446" width="60" height="32"/>
-  <object id="25" name="Solid" type="Ground" x="32" y="448" width="192" height="32"/>
+  <object id="25" name="Solid" type="Ground" x="96" y="447" width="192" height="32"/>
   <object id="28" name="Solid" type="Ground" x="928" y="194" width="158" height="32"/>
   <object id="29" name="Solid" type="Ground" x="1152" y="160" width="68" height="64"/>
   <object id="30" name="Solid" type="Ground" x="1224" y="192" width="184" height="32"/>
@@ -1234,10 +1234,13 @@
   <object id="53" name="Solid" type="Ground" x="768" y="188" width="61.3333" height="36"/>
   <object id="54" name="Solid" type="Ground" x="703" y="160" width="65" height="64"/>
   <object id="57" name="Spawn" type="Spawn" x="797.333" y="110" width="28" height="60"/>
-  <object id="58" name="MSolid" type="Move Platform" x="610.667" y="418" width="98" height="34"/>
+  <object id="58" name="MSolid" type="Move Platform" x="820.667" y="416" width="98" height="34"/>
   <object id="59" name="End" type="End" x="1822" y="544" width="64" height="60"/>
   <object id="61" name="Solid" type="Ground" x="1472" y="450" width="64" height="154"/>
   <object id="65" name="Solid" type="Ground" x="3.0303" y="606.061" width="1918.18" height="33.3333"/>
   <object id="79" name="Portal" type="Portal" x="862.667" y="277.333" width="34.6667" height="32"/>
+  <object id="91" name="Portal" type="Portal" x="34.667" y="567.333" width="30.6667" height="28"/>
+  <object id="92" name="Enemy" type="Drone" x="1119" y="528" width="66" height="44"/>
+  <object id="93" name="Enemy" type="Drone" x="475" y="529" width="66" height="44"/>
  </objectgroup>
 </map>

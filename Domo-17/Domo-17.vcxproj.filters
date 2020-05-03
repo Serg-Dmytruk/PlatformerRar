@@ -56,5 +56,11 @@
     <ClInclude Include="MovingPlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

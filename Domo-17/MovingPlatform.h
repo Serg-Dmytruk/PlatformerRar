@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "GameSprite.h"
 #include "View.h"
 #include <vector>

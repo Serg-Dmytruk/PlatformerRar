@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Level.h"
 #include <list>
+#include "Animator.h"
 
 using namespace sf;
 //Тмп Текстури для анімації
@@ -21,19 +22,12 @@ class Player : public GameSprite
 protected:
 	Vector2f WhereIam;
 	Sprite ObjSprite;
-	float CurrentFrame;
 	int Health;
 	bool Life;
-	float Speed;
-	float Dx;
-	float Dy;
-	bool OnGround;
-	bool CanIJump;
-	bool PortalJump;
+	float Speed, Dx, Dy, MyWingth, MyHeigth, CurrentFrame;
+	bool OnGround, CanIJump, PortalJump, IamShoot;
 	enum { left, right, jump, stay } State;
 	std::vector<Object> ObjectsInMap;
-	float MyWingth;
-	float MyHeigth;
 public:
 	Player(Texture& NewSprite, Level& lvl, float X, float Y)
 	{
@@ -53,6 +47,7 @@ public:
 		MyHeigth = 55;
 		MyWingth = 25;
 		PortalJump = false;
+		IamShoot = false;
 	}
 	void DrawObj(RenderWindow& Show) override
 	{
@@ -179,12 +174,33 @@ public:
 			Speed = -0.1;
 			OnGround = false;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Down))
+		if (Keyboard::isKeyPressed(Keyboard::F) && OnGround)
 		{
-
+			Speed = 0;
+			IamShoot = true;
+			ShootAnimation();
+		}
+		else
+		{
+			IamShoot = false;
+		}
+		if (Keyboard::isKeyPressed(Keyboard::F) && (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::Right)) && IamShoot)
+		{
+			if (Keyboard::isKeyPressed(Keyboard::Right))
+			{
+				Speed = 0.15;
+				State = right;
+				ShootAndRunAnimation(time);
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Left))
+			{
+				Speed = -0.15;
+				State = left;
+				ShootAndRunAnimation(time);
+			}
 		}
 		float IdleTime = ItsTimeToStop.getElapsedTime().asMilliseconds();
-		if (IdleTime >= 250)
+		if (IdleTime >= 300 && !IamShoot)
 		{
 			ItsTimeToStop.restart();
 			State = stay;
@@ -193,34 +209,37 @@ public:
 	}
 	void Update(float& time) override
 	{
-		getplayercoordinateforview(WhereIam.x, WhereIam.y);
-		Movment(time);
-		switch (State)
+		if (Life)
 		{
-		case right: Dx = Speed; break;
-		case left: Dx = Speed; break;
-		case jump: Dy = Speed; break;
-		case stay: Dx = Speed; IdleAnimation(time); break;
+			getplayercoordinateforview(WhereIam.x, WhereIam.y);
+			Movment(time);
+			switch (State)
+			{
+			case right: Dx = Speed; break;
+			case left: Dx = Speed; break;
+			case jump: Dy = Speed; break;
+			case stay: Dx = Speed; IdleAnimation(time); break;
+			}
+			WhereIam.x += Dx * time;
+			Colision(Dx, 0);
+			WhereIam.y += Dy * time;
+			Colision(0, Dy);
+			ObjSprite.setPosition(WhereIam.x, WhereIam.y);
+			MyGravity(time);
+			if (!OnGround)
+			{
+				JumpAnimation(time);
+				CanIJump = false;
+			}
+			else
+			{
+				float TimeLeft = TimeLeftForJump.getElapsedTime().asSeconds();
+				if (TimeLeft >= 1) { TimeLeftForJump.restart(); CanIJump = true; }
+			}
 		}
-		WhereIam.x += Dx * time;
-		Colision(Dx, 0);
-		WhereIam.y += Dy * time;
-		Colision(0, Dy);
-		ObjSprite.setPosition(WhereIam.x, WhereIam.y);
-		if (!PortalJump)
-			Dy += 0.0001 * time;
 		else
-			Dy = 0; PortalJump = false;
+		{
 
-		if (!OnGround)
-		{
-			JumpAnimation(time);
-			CanIJump = false;
-		}
-		else
-		{
-			float TimeLeft = TimeLeftForJump.getElapsedTime().asSeconds();
-			if (TimeLeft >= 1) { TimeLeftForJump.restart(); CanIJump = true; }
 		}
 	}
 	bool PLayerIsAlive()
@@ -247,18 +266,6 @@ public:
 					if (Dx < 0) { WhereIam.y = ObjectsInMap[i].rect.top - (MyHeigth + 200); Dy = 0; OnGround = false; PortalJump = true; }
 				}
 			}
-	}
-	void ColisionWithObjects(float Dx, float Dy)
-	{
-
-	}
-	float GetMyX()
-	{
-		return WhereIam.x;
-	}
-	float GetMyY()
-	{
-		return WhereIam.y;
 	}
 	void JumpAnimation(float& time)
 	{
@@ -357,5 +364,141 @@ public:
 	void SetPortalJump(bool NewValue)
 	{
 		PortalJump = NewValue;
+	}
+	void ShootAnimation()
+	{
+		TextureIdleTmp.loadFromFile("SPRITES\\player\\shoot\\shoot.png");
+		ObjSprite.setTexture(TextureIdleTmp);
+	}
+	bool GetShoot()
+	{
+		return IamShoot;
+	}
+	void ShootAndRunAnimation(float time)
+	{
+		CurrentFrame += 0.003 * time;
+		if (CurrentFrame > 8)
+			CurrentFrame = 0;
+		if (State == right)
+		{
+			if (CurrentFrame <= 1)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-1.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 1 && CurrentFrame <= 2)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-2.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 2 && CurrentFrame <= 3)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-3.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 3 && CurrentFrame <= 4)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-4.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 4 && CurrentFrame <= 5)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-5.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 5 && CurrentFrame <= 6)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-6.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 6 && CurrentFrame <= 7)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-7.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+			else if (CurrentFrame > 7 && CurrentFrame <= 8)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-8.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(0, 0, 71, 67));
+			}
+		}
+		if(State == left)
+		{
+			if (CurrentFrame <= 1)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-1.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 1 && CurrentFrame <= 2)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-2.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 2 && CurrentFrame <= 3)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-3.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 3 && CurrentFrame <= 4)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-4.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 4 && CurrentFrame <= 5)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-5.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 5 && CurrentFrame <= 6)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-6.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 6 && CurrentFrame <= 7)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-7.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+			else if (CurrentFrame > 7 && CurrentFrame <= 8)
+			{
+				TextureRunRightTmp.loadFromFile("SPRITES\\player\\run-shoot\\run-shoot-8.png");
+				ObjSprite.setTexture(TextureRunRightTmp);
+				ObjSprite.setTextureRect(IntRect(71, 0, -71, 67));
+			}
+		}
+	}
+	void MyGravity(float &time)
+	{
+		if (!PortalJump)
+			Dy += 0.0001 * time;
+		else
+			Dy = 0; PortalJump = false;
+	}
+	int GetDir()
+	{
+		return State;
+	}
+	bool GetLife()
+	{
+		return Life;
+	}
+	void SetLife(bool NewValue)
+	{
+		Life = NewValue;
 	}
 };

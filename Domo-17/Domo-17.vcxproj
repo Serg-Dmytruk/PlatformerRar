@@ -151,6 +151,8 @@
     <ClCompile Include="tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animator.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="EnemyDrone.h" />
     <ClInclude Include="GameSprite.h" />
     <ClInclude Include="Level.h" />
